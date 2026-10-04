@@ -1,0 +1,21 @@
+name: Temporary schedule check
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Show trigger and UTC time
+        env:
+          TRIGGER: ${{ github.event_name }}
+        run: |
+          echo "Trigger: $TRIGGER"
+          date -u '+UTC: %Y-%m-%d %H:%M:%S'
+          echo "Scheduled trigger received; no scraping or database writes."
