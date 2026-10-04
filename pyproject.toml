@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pelikan-rome-tracker"
+version = "0.1.0"
+description = "Pelikan flight price observations for Teatro Argentina, stored in Supabase"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+pelikan-tracker = "pelikan_tracker.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["pelikan_tracker*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

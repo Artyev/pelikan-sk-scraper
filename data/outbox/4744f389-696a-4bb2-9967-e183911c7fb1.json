@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "search": {
+    "id": "4744f389-696a-4bb2-9967-e183911c7fb1",
+    "run_id": "f2a37e05-bc96-4deb-84d4-07010d21ea03",
+    "event_id": "teatro-argentina-non-posso-narrare-2027-02-18",
+    "origin": "VIE",
+    "departure_date": "2027-02-18",
+    "started_at": "2026-10-04T18:19:49.439171+00:00",
+    "event_start": "2027-02-18T20:00:00+01:00",
+    "arrival_buffer_minutes": 180,
+    "search_url": "https://www.pelikan.sk/sk/letenky/T:2,P:1000E,CDF:AVIE,CDT:CROM,DD:2027_2_18,R:0,LOAD",
+    "status": "error",
+    "error": "Network failure after 3 attempts",
+    "finished_at": "2026-10-04T18:19:59.439781+00:00",
+    "observed_at": "2026-10-04T18:19:59.439800+00:00",
+    "offer_count": 0,
+    "eligible_count": 0,
+    "diagnostics": {
+      "pages": 0,
+      "excluded": {},
+      "source_total": null
+    }
+  },
+  "offers": []
+}
