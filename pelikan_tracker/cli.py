@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,6 +16,15 @@ from .storage import CapacityError, SupabaseStore, save_outbox
 
 def now():
     return datetime.now(timezone.utc).isoformat()
+
+
+def execution_metadata():
+    if os.environ.get('GITHUB_ACTIONS') == 'true':
+        return {'platform': 'github_actions', 'trigger': os.environ.get('GITHUB_EVENT_NAME'),
+                'github_run_id': os.environ.get('GITHUB_RUN_ID'),
+                'github_run_attempt': os.environ.get('GITHUB_RUN_ATTEMPT'),
+                'mode': os.environ.get('COLLECTION_MODE')}
+    return {'platform': 'local', 'trigger': 'local'}
 
 
 def main(argv=None):
@@ -95,6 +105,7 @@ def main(argv=None):
             search.update(finished_at=now(), observed_at=now(), offer_count=len(offers),
                           eligible_count=sum(o['eligible_for_event'] and o['available'] for o in offers),
                           diagnostics={'pages': len(pages), 'excluded': excluded,
+                                       'execution': execution_metadata(),
                                        'source_total': pages[0].get('total') if pages else None})
             snapshot = {'schema_version': 1, 'search': search, 'offers': offers}
             path = save_outbox(args.outbox, snapshot)

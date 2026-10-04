@@ -44,7 +44,12 @@ class HTTPClient:
         raise FetchError('Request failed')
 
     def json(self, url, **kwargs):
+        content = self.request(url, **kwargs)
         try:
-            return json.loads(self.request(url, **kwargs))
+            return json.loads(content)
         except (ValueError, UnicodeError):
+            lowered = content.lower()
+            if any(marker in lowered for marker in (
+                    b'captcha', b'cf-chl-', b'verify you are human', b'checking your browser')):
+                raise BlockedError('CAPTCHA/challenge page; stopping, no automatic bypass') from None
             raise FetchError('Expected JSON; possible site change or challenge page') from None
