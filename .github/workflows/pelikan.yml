@@ -1,0 +1,55 @@
+name: Pelikan flight collection
+
+on:
+  schedule:
+    - cron: '37 6,18 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'check = one VIE search; collect = full scan; sync = retry pending uploads'
+        type: choice
+        options: [check, collect, sync]
+        default: check
+
+permissions:
+  contents: read
+  actions: write # Delete only this collector's artifacts after acknowledged delivery.
+
+concurrency:
+  group: pelikan-flight-collection
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CAMPAIGN_START_UTC: ${{ vars.CAMPAIGN_START_UTC }}
+      COLLECTION_MODE: ${{ inputs.mode || 'collect' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check fixed campaign window
+        id: window
+        run: python -m pelikan_tracker.github_runner gate
+      - name: Recover pending snapshots and collect
+        if: steps.window.outputs.active == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        # Leave time to save pending data before the job's hard timeout.
+        run: timeout --signal=INT --kill-after=20s 40m python -u -m pelikan_tracker.github_runner run
+      - name: Preserve new snapshots not yet delivered to Supabase
+        if: ${{ always() && steps.window.outputs.active == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: pelikan-pending-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          path: data/cloud-new/*.json
+          if-no-files-found: ignore
+          retention-days: 30
+          compression-level: 9
