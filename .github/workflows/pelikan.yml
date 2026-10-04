@@ -2,7 +2,7 @@ name: Pelikan flight collection
 
 on:
   schedule:
-    - cron: '37 6,18 * * *'
+    - cron: '53 7,19 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -53,3 +53,4 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
           compression-level: 9
+
