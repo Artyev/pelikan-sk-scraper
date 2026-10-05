@@ -1,8 +1,6 @@
 name: Pelikan flight collection
 
 on:
-  schedule:
-    - cron: '22 8,20 * * *'
   workflow_dispatch:
     inputs:
       mode:
