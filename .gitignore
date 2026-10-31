@@ -43,3 +43,4 @@ coverage.xml
 Thumbs.db
 *.swp
 *.swo
+.vscode/
