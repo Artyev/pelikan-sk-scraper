@@ -9,7 +9,7 @@
   "request_interval_seconds": 5,
   "timeout_seconds": 60,
   "max_pages": 30,
-  "collection_days": 21,
+  "collection_days": 137,
   "collection_interval_hours": 12,
   "origins": [
     {"iata":"LHR","timezone":"Europe/London"},

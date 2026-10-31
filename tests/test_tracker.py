@@ -215,10 +215,10 @@ def test_campaign_schedule_and_stop(tmp_path, config):
         calls.append(end)
         return 0
     path = tmp_path / 'campaign.json'
-    for hour in range(21 * 24 + 48):
+    for hour in range(137 * 24 + 48):
         tick(path, config, collect, start + timedelta(hours=hour))
-    assert len(calls) == 42
-    assert set(calls) == {(start + timedelta(days=21)).isoformat()}
+    assert len(calls) == 274
+    assert set(calls) == {(start + timedelta(days=137)).isoformat()}
 
 
 def test_campaign_failed_slot_and_restart(tmp_path, config):
@@ -241,10 +241,10 @@ def test_campaign_failed_slot_and_restart(tmp_path, config):
 def test_storage_estimate(config):
     from pelikan_tracker.campaign import estimate
     result = estimate(config, 90, 20)
-    assert result['runs'] == 42
-    assert result['searches'] == 3780
-    assert result['observation_rows'] == 75600
-    assert result['estimated_flight_mb'] == 158.76
+    assert result['runs'] == 274
+    assert result['searches'] == 24660
+    assert result['observation_rows'] == 493200
+    assert result['estimated_flight_mb'] == 1035.72
 
 
 @pytest.mark.parametrize('error', [CapacityError('budget'), FetchError('offline')])

@@ -39,10 +39,10 @@ def main(argv=None):
         if name == 'run':
             command.add_argument('--local-only', action='store_true', help='Save outbox without Supabase')
             command.add_argument('--until', help=argparse.SUPPRESS)
-    campaign = sub.add_parser('tick', help='Run if due within a persistent 21-day window')
+    campaign = sub.add_parser('tick', help='Run if due within a persistent campaign window')
     campaign.add_argument('--state', default='data/campaign.json')
     campaign.add_argument('--local-only', action='store_true')
-    estimation = sub.add_parser('estimate', help='Offline three-week storage estimate')
+    estimation = sub.add_parser('estimate', help='Offline campaign storage estimate')
     estimation.add_argument('--offers-per-search', type=int, default=20)
     sub.add_parser('usage', help='Read actual DB and flight-table sizes from Supabase')
     sub.add_parser('sync', help='Retry pending outbox uploads; makes no Pelikan requests')
